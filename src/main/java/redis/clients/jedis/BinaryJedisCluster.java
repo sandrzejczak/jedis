@@ -1,7 +1,7 @@
 package redis.clients.jedis;
 
 import redis.clients.jedis.commands.BinaryJedisCommands;
-import redis.clients.jedis.commands.JedisClusterBinaryScriptingCommands;
+import redis.clients.jedis.commands.BinaryScriptingCommands;
 import redis.clients.jedis.commands.MultiKeyBinaryCommands;
 import redis.clients.jedis.params.geo.GeoRadiusParam;
 import redis.clients.jedis.params.set.SetParams;
@@ -19,8 +19,8 @@ import java.util.Set;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-public class BinaryJedisCluster implements BinaryJedisCommands,
-    MultiKeyBinaryCommands, JedisClusterBinaryScriptingCommands, Closeable {
+public class BinaryJedisCluster implements BinaryJedisCommands, MultiKeyBinaryCommands,
+    BinaryScriptingCommands, Closeable {
 
   public static final short HASHSLOTS = 16384;
   protected static final int DEFAULT_TIMEOUT = 2000;
@@ -1284,6 +1284,10 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
   }
 
   @Override
+  public Object eval(byte[] script) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
   public Object eval(final byte[] script, byte[] key) {
     return new JedisClusterCommand<Object>(connectionHandler, maxAttempts) {
       @Override
@@ -1294,6 +1298,10 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
   }
 
   @Override
+  public Object evalsha(byte[] sha1) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
   public Object evalsha(final byte[] sha1, byte[] key) {
     return new JedisClusterCommand<Object>(connectionHandler, maxAttempts) {
       @Override
@@ -1324,6 +1332,10 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
   }
 
   @Override
+  public List<Long> scriptExists(byte[]... sha1) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
   public List<Long> scriptExists(final byte[] key, final byte[][] sha1) {
     return new JedisClusterCommand<List<Long>>(connectionHandler, maxAttempts) {
       @Override
@@ -1334,6 +1346,10 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
   }
 
   @Override
+  public byte[] scriptLoad(byte[] script) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
   public byte[] scriptLoad(final byte[] script, final byte[] key) {
     return new JedisClusterCommand<byte[]>(connectionHandler, maxAttempts) {
       @Override
@@ -1344,6 +1360,10 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
   }
 
   @Override
+  public String scriptFlush() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
   public String scriptFlush(final byte[] key) {
     return new JedisClusterCommand<String>(connectionHandler, maxAttempts) {
       @Override
@@ -1354,6 +1374,10 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
   }
 
   @Override
+  public String scriptKill() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
   public String scriptKill(byte[] key) {
     return new JedisClusterCommand<String>(connectionHandler, maxAttempts) {
       @Override
