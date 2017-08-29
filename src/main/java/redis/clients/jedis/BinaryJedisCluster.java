@@ -2,7 +2,7 @@ package redis.clients.jedis;
 
 import redis.clients.jedis.commands.BinaryJedisCommands;
 import redis.clients.jedis.commands.JedisClusterBinaryScriptingCommands;
-import redis.clients.jedis.commands.MultiKeyBinaryJedisClusterCommands;
+import redis.clients.jedis.commands.MultiKeyBinaryCommands;
 import redis.clients.jedis.params.geo.GeoRadiusParam;
 import redis.clients.jedis.params.set.SetParams;
 import redis.clients.jedis.params.sortedset.ZAddParams;
@@ -20,7 +20,7 @@ import java.util.Set;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 public class BinaryJedisCluster implements BinaryJedisCommands,
-    MultiKeyBinaryJedisClusterCommands, JedisClusterBinaryScriptingCommands, Closeable {
+    MultiKeyBinaryCommands, JedisClusterBinaryScriptingCommands, Closeable {
 
   public static final short HASHSLOTS = 16384;
   protected static final int DEFAULT_TIMEOUT = 2000;
@@ -1899,6 +1899,36 @@ public class BinaryJedisCluster implements BinaryJedisCommands,
 
   @Override
   public Long move(byte[] key, int dbIndex) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public List<byte[]> blpop(byte[]... args) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public List<byte[]> brpop(byte[]... args) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public Set<byte[]> keys(byte[] pattern) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String watch(byte[]... keys) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String unwatch() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public byte[] randomBinaryKey() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }
