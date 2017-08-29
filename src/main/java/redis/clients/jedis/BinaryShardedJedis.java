@@ -884,5 +884,15 @@ public class BinaryShardedJedis extends Sharded<Jedis, JedisShardInfo> implement
     Jedis j = getShard(key);
     return j.hstrlen(key, field);
   }
-  
+
+  @Override
+  public String psetex(byte[] key, long milliseconds, byte[] value) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public ScanResult<byte[]> scan(byte[] cursor, ScanParams params) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
 }

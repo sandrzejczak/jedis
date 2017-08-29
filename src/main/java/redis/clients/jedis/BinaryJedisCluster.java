@@ -1,12 +1,13 @@
 package redis.clients.jedis;
 
-import redis.clients.jedis.commands.BinaryJedisClusterCommands;
+import redis.clients.jedis.commands.BinaryJedisCommands;
 import redis.clients.jedis.commands.JedisClusterBinaryScriptingCommands;
 import redis.clients.jedis.commands.MultiKeyBinaryJedisClusterCommands;
 import redis.clients.jedis.params.geo.GeoRadiusParam;
 import redis.clients.jedis.params.set.SetParams;
 import redis.clients.jedis.params.sortedset.ZAddParams;
 import redis.clients.jedis.params.sortedset.ZIncrByParams;
+import redis.clients.util.JedisClusterHashTagUtil;
 import redis.clients.util.KeyMergeUtil;
 import redis.clients.util.SafeEncoder;
 
@@ -17,9 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import redis.clients.util.JedisClusterHashTagUtil;
 
-public class BinaryJedisCluster implements BinaryJedisClusterCommands,
+public class BinaryJedisCluster implements BinaryJedisCommands,
     MultiKeyBinaryJedisClusterCommands, JedisClusterBinaryScriptingCommands, Closeable {
 
   public static final short HASHSLOTS = 16384;
@@ -1895,5 +1895,10 @@ public class BinaryJedisCluster implements BinaryJedisClusterCommands,
         return connection.hstrlen(key, field);
       }
     }.runBinary(key);
+  }
+
+  @Override
+  public Long move(byte[] key, int dbIndex) {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

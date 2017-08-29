@@ -1,13 +1,16 @@
 package redis.clients.jedis;
 
 import redis.clients.jedis.BinaryClient.LIST_POSITION;
+import redis.clients.jedis.commands.JedisClusterScriptingCommands;
+import redis.clients.jedis.commands.JedisCommands;
+import redis.clients.jedis.commands.MultiKeyJedisClusterCommands;
 import redis.clients.jedis.params.geo.GeoRadiusParam;
+import redis.clients.jedis.params.set.SetParams;
 import redis.clients.jedis.params.sortedset.ZAddParams;
 import redis.clients.jedis.params.sortedset.ZIncrByParams;
-import redis.clients.jedis.commands.JedisClusterCommands;
-import redis.clients.jedis.commands.JedisClusterScriptingCommands;
-import redis.clients.jedis.commands.MultiKeyJedisClusterCommands;
+import redis.clients.util.JedisClusterHashTagUtil;
 import redis.clients.util.KeyMergeUtil;
+import redis.clients.util.SafeEncoder;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,12 +20,9 @@ import java.util.Set;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import redis.clients.jedis.params.set.SetParams;
-import redis.clients.util.JedisClusterHashTagUtil;
-import redis.clients.util.SafeEncoder;
-
-public class JedisCluster extends BinaryJedisCluster implements JedisClusterCommands,
+public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
     MultiKeyJedisClusterCommands, JedisClusterScriptingCommands {
+
   public static enum Reset {
     SOFT, HARD
   }
@@ -248,6 +248,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
   }
 
   @Override
+  public Long pttl(String key) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
   public Boolean setbit(final String key, final long offset, final boolean value) {
     return new JedisClusterCommand<Boolean>(connectionHandler, maxAttempts) {
       @Override
@@ -325,6 +330,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
         return connection.setex(key, seconds, value);
       }
     }.run(key);
+  }
+
+  @Override
+  public String psetex(String key, long milliseconds, String value) {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
@@ -455,6 +465,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
         return connection.hincrBy(key, field, value);
       }
     }.run(key);
+  }
+
+  @Override
+  public Double hincrByFloat(String key, String field, double value) {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
@@ -1241,7 +1256,17 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
     }.run(key);
   }
 
-    @Override
+  @Override
+  public Long bitpos(String key, boolean value) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public Long bitpos(String key, boolean value, BitPosParams params) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
   public ScanResult<String> scan(final String cursor, final ScanParams params) {
 
     String matchPattern = null;
@@ -1276,6 +1301,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
   }
 
   @Override
+  public ScanResult<Entry<String, String>> hscan(String key, String cursor, ScanParams params) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
   public ScanResult<String> sscan(final String key, final String cursor) {
     return new JedisClusterCommand<ScanResult<String>>(connectionHandler, maxAttempts) {
       @Override
@@ -1286,6 +1316,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
   }
 
   @Override
+  public ScanResult<String> sscan(String key, String cursor, ScanParams params) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
   public ScanResult<Tuple> zscan(final String key, final String cursor) {
     return new JedisClusterCommand<ScanResult<Tuple>>(connectionHandler, maxAttempts) {
       @Override
@@ -1293,6 +1328,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
         return connection.zscan(key, cursor);
       }
     }.run(key);
+  }
+
+  @Override
+  public ScanResult<Tuple> zscan(String key, String cursor, ScanParams params) {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
@@ -1873,4 +1913,10 @@ public class JedisCluster extends BinaryJedisCluster implements JedisClusterComm
       }
     }.run(key);
   }
+
+  @Override
+  public Long move(String key, int dbIndex) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
 }

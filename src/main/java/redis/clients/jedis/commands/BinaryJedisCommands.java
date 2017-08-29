@@ -55,6 +55,8 @@ public interface BinaryJedisCommands {
 
   String setex(byte[] key, int seconds, byte[] value);
 
+  String psetex(byte[] key, long milliseconds, byte[] value);
+
   Long decrBy(byte[] key, long integer);
 
   Long decr(byte[] key);
@@ -273,6 +275,8 @@ public interface BinaryJedisCommands {
   ScanResult<Map.Entry<byte[], byte[]>> hscan(byte[] key, byte[] cursor);
 
   ScanResult<Map.Entry<byte[], byte[]>> hscan(byte[] key, byte[] cursor, ScanParams params);
+
+  ScanResult<byte[]> scan(final byte[] cursor, final ScanParams params);
 
   ScanResult<byte[]> sscan(byte[] key, byte[] cursor);
 
