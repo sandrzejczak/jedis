@@ -22,6 +22,10 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 public class BinaryJedisCluster implements BinaryJedisCommands, MultiKeyBinaryCommands,
     BinaryScriptingCommands, Closeable {
 
+  public static enum Reset {
+    SOFT, HARD
+  }
+
   public static final short HASHSLOTS = 16384;
   protected static final int DEFAULT_TIMEOUT = 2000;
   protected static final int DEFAULT_MAX_REDIRECTIONS = 5;

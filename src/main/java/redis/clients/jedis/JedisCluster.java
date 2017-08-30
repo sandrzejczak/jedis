@@ -23,10 +23,6 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 public class JedisCluster extends BinaryJedisCluster implements JedisCommands, MultiKeyCommands,
     ScriptingCommands {
 
-  public static enum Reset {
-    SOFT, HARD
-  }
-
   public JedisCluster(HostAndPort node) {
 	this(Collections.singleton(node), DEFAULT_TIMEOUT);
   }
