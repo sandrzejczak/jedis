@@ -1,7 +1,7 @@
 package redis.clients.jedis;
 
 import redis.clients.jedis.BinaryClient.LIST_POSITION;
-import redis.clients.jedis.commands.ScriptingCommands;
+import redis.clients.jedis.commands.JedisClusterScriptingCommands;
 import redis.clients.jedis.commands.JedisCommands;
 import redis.clients.jedis.commands.MultiKeyCommands;
 import redis.clients.jedis.params.geo.GeoRadiusParam;
@@ -20,8 +20,8 @@ import java.util.Set;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-public class JedisCluster extends BinaryJedisCluster implements JedisCommands, MultiKeyCommands,
-    ScriptingCommands {
+public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
+    MultiKeyCommands, JedisClusterScriptingCommands {
 
   public JedisCluster(HostAndPort node) {
 	this(Collections.singleton(node), DEFAULT_TIMEOUT);
@@ -1715,10 +1715,6 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
-  public Object eval(String script) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
   public Object eval(final String script, final String key) {
     return new JedisClusterCommand<Object>(connectionHandler, maxAttempts) {
       @Override
@@ -1759,10 +1755,6 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
-  public Object evalsha(String sha1) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
   public Object evalsha(final String sha1, final String key) {
     return new JedisClusterCommand<Object>(connectionHandler, maxAttempts) {
       @Override
@@ -1773,10 +1765,6 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
-  public Boolean scriptExists(String sha1) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
   public Boolean scriptExists(final String sha1, final String key) {
     return new JedisClusterCommand<Boolean>(connectionHandler, maxAttempts) {
       @Override
@@ -1787,10 +1775,6 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
-  public List<Boolean> scriptExists(String... sha1) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
   public List<Boolean> scriptExists(final String key, final String... sha1) {
     return new JedisClusterCommand<List<Boolean>>(connectionHandler, maxAttempts) {
       @Override
@@ -1801,10 +1785,6 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
-  public String scriptLoad(String script) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
   public String scriptLoad(final String script, final String key) {
     return new JedisClusterCommand<String>(connectionHandler, maxAttempts) {
       @Override
