@@ -1818,7 +1818,12 @@ public class BinaryJedisCluster implements BinaryJedisCommands, MultiKeyBinaryCo
       }
     }.runBinary(key);
   }
-  
+
+  @Override
+  public ScanResult<byte[]> scan(final byte[] cursor) {
+    return scan(cursor, new ScanParams());
+  }
+
   @Override
   public ScanResult<byte[]> scan(final byte[] cursor, final ScanParams params) {
 

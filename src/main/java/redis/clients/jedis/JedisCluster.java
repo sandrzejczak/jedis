@@ -1263,6 +1263,16 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
+  public Set<String> keys(String pattern) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public ScanResult<String> scan(final String cursor) {
+    return scan(cursor, new ScanParams());
+  }
+
+  @Override
   public ScanResult<String> scan(final String cursor, final ScanParams params) {
 
     String matchPattern = null;
@@ -1946,22 +1956,12 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands, M
   }
 
   @Override
-  public Set<String> keys(String pattern) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public String watch(String... keys) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
   public String randomKey() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public ScanResult<String> scan(String cursor) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
