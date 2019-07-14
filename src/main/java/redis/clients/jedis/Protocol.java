@@ -3,7 +3,6 @@ package redis.clients.jedis;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.exceptions.JedisAskDataException;
@@ -274,17 +273,18 @@ public final class Protocol {
   }
 
   public static enum Keyword {
-    AGGREGATE, ALPHA, ASC, BY, DESC, GET, LIMIT, MESSAGE, NO, NOSORT, PMESSAGE, PSUBSCRIBE,
-    PUNSUBSCRIBE, OK, ONE, QUEUED, SET, STORE, SUBSCRIBE, UNSUBSCRIBE, WEIGHTS, WITHSCORES,
+    // Request keywords
+    AGGREGATE, ALPHA, ASC, BY, DESC, GET, LIMIT, NO, NOSORT, ONE, SET, STORE, WEIGHTS, WITHSCORES,
     RESETSTAT, REWRITE, RESET, FLUSH, EXISTS, LOAD, KILL, LEN, REFCOUNT, ENCODING, IDLETIME,
-    GETNAME, SETNAME, LIST, MATCH, COUNT, PING, PONG, UNLOAD, REPLACE, KEYS, PAUSE, DOCTOR, 
-    BLOCK, NOACK, STREAMS, KEY, CREATE, MKSTREAM, SETID, DESTROY, DELCONSUMER, MAXLEN, GROUP, 
-    IDLE, TIME, RETRYCOUNT, FORCE;
+    GETNAME, SETNAME, LIST, MATCH, COUNT, UNLOAD, REPLACE, KEYS, PAUSE, DOCTOR, BLOCK, NOACK,
+    STREAMS, CREATE, MKSTREAM, SETID, DESTROY, DELCONSUMER, MAXLEN, GROUP, IDLE, RETRYCOUNT, FORCE,
+    // Response keywords
+    OK, QUEUED, message, pmessage, psubscribe, punsubscribe, subscribe, unsubscribe, pong;
 
     public final byte[] raw;
 
     Keyword() {
-      raw = SafeEncoder.encode(this.name().toLowerCase(Locale.ENGLISH));
+      raw = SafeEncoder.encode(this.name());
     }
   }
 }
