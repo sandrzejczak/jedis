@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import redis.clients.jedis.Protocol;
@@ -14,11 +16,25 @@ import redis.clients.jedis.util.Slowlog;
 
 public class SlowlogCommandsTest extends JedisCommandTestBase {
 
+  private final String configParam = "slowlog-log-slower-than";
+  private String configValue;
+
+  @Before
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
+    configValue = jedis.configGet(configParam).get(1);
+  }
+
+  @After
+  @Override
+  public void tearDown() throws Exception {
+    jedis.configSet(configParam, configValue);
+    super.tearDown();
+  }
+
   @Test
   public void slowlog() {
-    final String slowlogTimeParam = "slowlog-log-slower-than";
-    final String slowlogTimeValue = jedis.configGet(slowlogTimeParam).get(1);
-
     jedis.configSet("slowlog-log-slower-than", "0");
     jedis.set("foo", "bar");
     jedis.set("foo2", "bar2");
@@ -34,19 +50,14 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
 
     assertNotNull(log1);
     assertNotNull(blog1);
-
-    jedis.configSet(slowlogTimeParam, slowlogTimeValue);
   }
 
   @Test
   public void slowlogObjectDetails() {
-    final String slowlogTimeParam = "slowlog-log-slower-than";
-    final String slowlogTimeValue = jedis.configGet(slowlogTimeParam).get(1);
-
     final String clientName = "slowlog-object-client";
     jedis.clientSetname(clientName);
     jedis.slowlogReset();
-    jedis.configSet("slowlog-log-slower-than", "0");
+    jedis.configSet(configParam, "0");
 
     List<Slowlog> logs = jedis.slowlogGet(); // Get only 'CONFIG SET'
     assertEquals(1, logs.size());
@@ -62,19 +73,14 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
     assertEquals("127.0.0.1", log.getClientIpPort().getHost());
     assertTrue(log.getClientIpPort().getPort() > 0);
     assertEquals(clientName, log.getClientName());
-
-    jedis.configSet(slowlogTimeParam, slowlogTimeValue);
   }
 
   @Test
   public void slowlogBinaryDetails() {
-    final String slowlogTimeParam = "slowlog-log-slower-than";
-    final String slowlogTimeValue = jedis.configGet(slowlogTimeParam).get(1);
-
     final byte[] clientName = SafeEncoder.encode("slowlog-binary-client");
     jedis.clientSetname(clientName);
     jedis.slowlogReset();
-    jedis.configSet(SafeEncoder.encode("slowlog-log-slower-than"), Protocol.toByteArray(0));
+    jedis.configSet(SafeEncoder.encode(configParam), Protocol.toByteArray(0));
 
     List<Object> logs = jedis.slowlogGetBinary(); // Get only 'CONFIG SET'
     assertEquals(1, logs.size());
@@ -90,7 +96,5 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
     assertArrayEquals(Protocol.toByteArray(0), (byte[]) args.get(3));
     assertTrue(SafeEncoder.encode((byte[]) log.get(4)).startsWith("127.0.0.1:"));
     assertArrayEquals(clientName, (byte[]) log.get(5));
-
-    jedis.configSet(slowlogTimeParam, slowlogTimeValue);
   }
 }
