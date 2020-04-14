@@ -16,27 +16,27 @@ import redis.clients.jedis.util.Slowlog;
 
 public class SlowlogCommandsTest extends JedisCommandTestBase {
 
-  private static final String SLOWLOG_CONFIG_PARAM = "slowlog-log-slower-than";
+  private static final String SLOWLOG_TIME_PARAM = "slowlog-log-slower-than";
   private static final String ZERO = "0";
-  private String slowlogConfigValue;
+  private String slowlogTimeValue;
 
   @Before
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    slowlogConfigValue = jedis.configGet(SLOWLOG_CONFIG_PARAM).get(1);
+    slowlogTimeValue = jedis.configGet(SLOWLOG_TIME_PARAM).get(1);
   }
 
   @After
   @Override
   public void tearDown() throws Exception {
-    jedis.configSet(SLOWLOG_CONFIG_PARAM, slowlogConfigValue);
+    jedis.configSet(SLOWLOG_TIME_PARAM, slowlogTimeValue);
     super.tearDown();
   }
 
   @Test
   public void slowlog() {
-    jedis.configSet(SLOWLOG_CONFIG_PARAM, ZERO);
+    jedis.configSet(SLOWLOG_TIME_PARAM, ZERO);
     jedis.set("foo", "bar");
     jedis.set("foo2", "bar2");
 
@@ -58,7 +58,7 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
     final String clientName = "slowlog-object-client";
     jedis.clientSetname(clientName);
     jedis.slowlogReset();
-    jedis.configSet(SLOWLOG_CONFIG_PARAM, ZERO);
+    jedis.configSet(SLOWLOG_TIME_PARAM, ZERO);
 
     List<Slowlog> logs = jedis.slowlogGet(); // Get only 'CONFIG SET'
     assertEquals(1, logs.size());
@@ -69,7 +69,7 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
     assertEquals(4, log.getArgs().size());
     assertEquals(SafeEncoder.encode(Protocol.Command.CONFIG.getRaw()), log.getArgs().get(0));
     assertEquals(SafeEncoder.encode(Protocol.Keyword.SET.getRaw()), log.getArgs().get(1));
-    assertEquals(SLOWLOG_CONFIG_PARAM, log.getArgs().get(2));
+    assertEquals(SLOWLOG_TIME_PARAM, log.getArgs().get(2));
     assertEquals(ZERO, log.getArgs().get(3));
     assertEquals("127.0.0.1", log.getClientIpPort().getHost());
     assertTrue(log.getClientIpPort().getPort() > 0);
@@ -81,7 +81,7 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
     final byte[] clientName = SafeEncoder.encode("slowlog-binary-client");
     jedis.clientSetname(clientName);
     jedis.slowlogReset();
-    jedis.configSet(SafeEncoder.encode(SLOWLOG_CONFIG_PARAM), SafeEncoder.encode(ZERO));
+    jedis.configSet(SafeEncoder.encode(SLOWLOG_TIME_PARAM), SafeEncoder.encode(ZERO));
 
     List<Object> logs = jedis.slowlogGetBinary(); // Get only 'CONFIG SET'
     assertEquals(1, logs.size());
@@ -93,7 +93,7 @@ public class SlowlogCommandsTest extends JedisCommandTestBase {
     assertEquals(4, args.size());
     assertArrayEquals(Protocol.Command.CONFIG.getRaw(), (byte[]) args.get(0));
     assertArrayEquals(Protocol.Keyword.SET.getRaw(), (byte[]) args.get(1));
-    assertArrayEquals(SafeEncoder.encode(SLOWLOG_CONFIG_PARAM), (byte[]) args.get(2));
+    assertArrayEquals(SafeEncoder.encode(SLOWLOG_TIME_PARAM), (byte[]) args.get(2));
     assertArrayEquals(Protocol.toByteArray(0), (byte[]) args.get(3));
     assertTrue(SafeEncoder.encode((byte[]) log.get(4)).startsWith("127.0.0.1:"));
     assertArrayEquals(clientName, (byte[]) log.get(5));
